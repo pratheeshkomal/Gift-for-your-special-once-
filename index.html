@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#17121d">
+  <title>Little Letter — Make It Special</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="ambient a1"></div><div class="ambient a2"></div>
+  <main id="app">
+
+    <section class="screen active" id="home">
+      <div class="hero-bears" aria-hidden="true">
+        <div class="bear bear-left"><span class="ear"></span><span class="ear e2"></span><span class="face">•ᴗ•</span><span class="heart">♥</span></div>
+        <div class="bear bear-right"><span class="ear"></span><span class="ear e2"></span><span class="face">•ᴗ•</span><span class="heart">♥</span></div>
+      </div>
+      <p class="eyebrow">A tiny corner for big feelings</p>
+      <h1>Some feelings deserve<br><em>more than a text.</em></h1>
+      <p class="sub">Create a little interactive surprise for someone who means a lot to you.</p>
+      <button class="primary" onclick="go('create')">Create something special <span>→</span></button>
+      <div class="tiny-note">No account • Free • Share by link</div>
+    </section>
+
+    <section class="screen" id="create">
+      <div class="topbar"><button class="back" onclick="go('home')">←</button><div class="progress"><i id="progress"></i></div><span id="stepNo">1/4</span></div>
+
+      <div class="form-step active" data-step="1">
+        <p class="eyebrow">First things first</p>
+        <h2>Who is this little surprise for?</h2>
+        <div class="relationship-grid">
+          <button class="choice" data-rel="Lover">❤️ <span>Lover</span></button>
+          <button class="choice" data-rel="Best Friend">🫂 <span>Best Friend</span></button>
+          <button class="choice" data-rel="Bestie">✨ <span>Bestie</span></button>
+          <button class="choice" data-rel="Sister">🌷 <span>Sister</span></button>
+          <button class="choice" data-rel="Brother">🌙 <span>Brother</span></button>
+          <button class="choice" data-rel="Friend">🍀 <span>Friend</span></button>
+          <button class="choice" data-rel="Family">🏡 <span>Family</span></button>
+          <button class="choice" data-rel="Someone special">🧸 <span>Someone special</span></button>
+        </div>
+        <button class="next" onclick="nextStep()" disabled id="next1">Continue →</button>
+      </div>
+
+      <div class="form-step" data-step="2">
+        <p class="eyebrow">Make it personal</p>
+        <h2>Tell me about your person.</h2>
+        <label>Their name<input id="receiver" maxlength="40" placeholder="e.g. Nanami"></label>
+        <label>Your name<input id="sender" maxlength="40" placeholder="e.g. Yuki"></label>
+        <label>What are you making?<select id="occasion"><option>Birthday</option><option>Sorry</option><option>Thank you</option><option>Just because</option><option>Appreciation</option><option>Custom</option></select></label>
+        <button class="next" onclick="nextStep()">Continue →</button>
+      </div>
+
+      <div class="form-step" data-step="3">
+        <p class="eyebrow">Your words</p>
+        <h2>Write what your heart wants to say.</h2>
+        <label>Letter<textarea id="letter" maxlength="1800" placeholder="Write anything you want them to know…"></textarea></label>
+        <div class="counter"><span id="count">0</span>/1800</div>
+        <label>Choose a vibe<select id="vibe"><option value="dreamy">Dreamy</option><option value="cute">Cute</option><option value="midnight">Midnight</option><option value="warm">Warm</option></select></label>
+        <button class="next" onclick="nextStep()">Make the surprise →</button>
+      </div>
+
+      <div class="form-step" data-step="4">
+        <p class="eyebrow">One last thing</p>
+        <h2>Let's add your little questions.</h2>
+        <p class="helper">These are shown before the letter. You can personalize them or keep the cute defaults.</p>
+        <label>Question 1<input id="q1" maxlength="120" value="Who is the best person ever?"></label>
+        <label>Question 2<input id="q2" maxlength="120" value="Who deserves all the happiness?"></label>
+        <label>Question 3<input id="q3" maxlength="120" value="Who would I choose again and again?"></label>
+        <button class="next" onclick="preview()">Preview the surprise ✨</button>
+      </div>
+    </section>
+
+    <section class="screen" id="preview">
+      <div class="preview-wrap">
+        <button class="back floating-back" onclick="go('create'); setStep(4)">← Edit</button>
+        <div class="preview-card">
+          <div class="mini-bears">🧸 💕 🧸</div>
+          <p class="eyebrow">A little surprise for</p>
+          <h2 id="pReceiver">Someone special</h2>
+          <p id="pOccasion" class="sub"></p>
+          <button class="primary" onclick="showQuestions()">Open it →</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen" id="questions">
+      <div class="question-wrap">
+        <div class="question-bear">🧸</div>
+        <p class="eyebrow" id="qLabel">Question 1 of 3</p>
+        <h2 id="questionText"></h2>
+        <div class="answers">
+          <button onclick="answer(this)">You, obviously 😭</button>
+          <button onclick="answer(this)">Hmm… let me think 👀</button>
+          <button onclick="answer(this)">There is only one answer 🫵</button>
+          <button onclick="answer(this)">Why are you asking? 😂</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen" id="reveal">
+      <div class="reveal-wrap">
+        <div class="burst">✦ ✧ ♥ ✧ ✦</div>
+        <div class="big-bears">🧸💗🧸</div>
+        <p class="eyebrow">Okay… you got it right.</p>
+        <h2>It was always <em id="rReceiver">you.</em></h2>
+        <button class="primary" onclick="openLetter()">There is one more thing →</button>
+      </div>
+    </section>
+
+    <section class="screen" id="letterScreen">
+      <div class="letter-page">
+        <div class="letter-top">🧸 <span>made with a little love</span> 🧸</div>
+        <p class="eyebrow" id="lOccasion">A little letter</p>
+        <h1 id="lReceiver"></h1>
+        <div class="divider">♡ ───── ✦ ───── ♡</div>
+        <p class="letter-body" id="lText"></p>
+        <div class="signature">Always,<br><strong id="lSender"></strong></div>
+        <div class="final-bear">🧸 &nbsp; ♡ &nbsp; 🧸</div>
+      </div>
+      <button class="share" onclick="showShare()">Create share link ↗</button>
+    </section>
+
+    <section class="screen" id="share">
+      <div class="share-card">
+        <div class="mini-bears">🧸✨🧸</div>
+        <p class="eyebrow">Your surprise is ready</p>
+        <h2>Send it to <span id="sReceiver"></span> 💌</h2>
+        <p class="sub">This link contains the surprise, so there is no account needed.</p>
+        <div class="link-box"><span id="shareLink"></span><button onclick="copyLink()">Copy</button></div>
+        <div id="qr"></div>
+        <button class="primary" onclick="nativeShare()">Share it ↗</button>
+        <button class="text-btn" onclick="go('home')">Create another</button>
+      </div>
+    </section>
+  </main>
+  <div id="toast"></div>
+  <script src="app.js"></script>
+</body>
+</html>
